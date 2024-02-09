@@ -1,0 +1,39 @@
+/* Cart.css */
+.custom-table {
+    background-color: #f8f9fa; /* Light gray background */
+    border-radius: 10px;
+  }
+  
+  .custom-table th {
+    background-color: #343a40; /* Dark background for table header */
+    color: #ffffff; /* White text color */
+    font-family: Arial, sans-serif; /* Custom font family */
+    font-size: 18px; /* Increased font size for table headers */
+    border: 1px solid #dee2e6; /* Add border to table headers */
+    padding: 10px; /* Add padding to table headers */
+  }
+  
+  .custom-table .food-image {
+    width: 50px; /* Adjust image size */
+  }
+  
+  .custom-table tbody tr {
+    border: 1px solid #3d4246; /* Add border to table rows */
+  }
+  
+  .custom-table tbody tr:last-child {
+    border-bottom: none; /* Remove border for the last row */
+  }
+  
+  .custom-table tbody td {
+    font-size: 16px; /* Increased font size for table data */
+    padding: 10px; /* Add padding to table data cells */
+    border: 1px solid #dee2e6; /* Add border to table data cells */
+  }
+  
+  .text-total {
+    font-size: 24px; /* Increased font size for total price text */
+    font-weight: bold; /* Make total price text bold */
+    margin-top: 20px; /* Add margin to the total price text */
+  }
+  

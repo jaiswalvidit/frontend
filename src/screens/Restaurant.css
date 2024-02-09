@@ -1,0 +1,108 @@
+.text-box {
+  border: 2px solid black;
+  border-radius: 5px;
+  outline: none;
+  background: none;
+  padding: 10px;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.form-label {
+  position: relative;
+  top: -40px;
+  left: -33%; /* Adjusted left position */
+  cursor: text;
+  transition: top 0.3s ease, left 0.3s ease, font-size 0.3s ease, color 0.3s ease;
+  color: #555;
+  margin-left: 2px;
+  padding-left: 2px;
+  font-size: 1.3em;
+  color: grey;
+  font-weight: 300;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.text-box:focus {
+  border-color: #11bcbc;
+  color: orange;
+}
+
+.text-box:focus ~ .form-label,
+.text-box:not(:placeholder-shown).text-box:not(:focus) ~ .form-label {
+  top: -60px;
+  left: -33%;
+  background:#bbcbda;
+  font-size: 1.2em;
+  color: #11bcbc;
+  /* border:1px solid  #11bcbc; */
+
+  padding: 1px 3px;
+}
+
+.card {
+  animation: fadeIn 0.5s ease-in-out; /* Added fadeIn animation */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(0px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Add this CSS to your additem.css file */
+
+/* Styling for select box */
+.form-select {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #7d5252;
+  border-radius: 5px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.form-check {
+  margin-bottom: 10px;
+}
+
+.form-check-input {
+  margin-left: 5px;
+}
+
+.form-check-label {
+  font-weight: normal; 
+}
+
+@media (max-width: 767px) {
+  .navbar-nav {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.navbar-toggler {
+  display: block;
+}
+
+.navbar-nav .nav-item {
+  margin: 10px 0;
+}
+
+.navbar-nav .nav-item:last-child {
+  margin-bottom: 20px;
+}
+.card {
+  animation: fadeIn 0.5s ease-in-out; /* Added fadeIn animation */
+  background-color: #bbcbda; /* Choose a light contrasting color */
+  /* border: 1px solid #2d665e; Add a border for contrast */
+  /* border-radius: 10px; Rounded corners for aesthetics */
+}
+
