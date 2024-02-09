@@ -30,21 +30,20 @@ const ForgotPassword = () => {
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     try {
-      // Verify OTP with backend
-      // Example API call:
-      // const response = await fetch('/api/verifyOTP', {
-      //   method: 'POST',
-      //   body: JSON.stringify({ email, otp }),
-      //   headers: {
-      //     'Content-Type': 'application/json'
-      //   }
-      // });
-      // const data = await response.json();
-      // if (data.success) {
-      //   setOtpVerified(true);
-      // } else {
-      //   setError('Invalid OTP');
-      // }
+     
+      const response = await fetch("https://backend-k4dp.onrender.com/api/sendotp", {
+        method: 'GET',
+        body: JSON.stringify({ email, otp }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      const data = await response.json();
+      if (data.success) {
+        setOtpVerified(true);
+      } else {
+        setError('Invalid OTP');
+      }
       setOtpVerified(true); // For demonstration purposes
     } catch (err) {
       setError('Failed to verify OTP');
