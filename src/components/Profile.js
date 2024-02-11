@@ -5,30 +5,33 @@ import EditAddress from "./EditAddress";
 import Review from "./Review";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [updatedUser, setUpdatedUser] = useState({});
   const [selectedOption, setSelectedOption] = useState("orders");
-  const useremail = localStorage.getItem("userEmail");
+  const email = localStorage.getItem("userEmail");
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = async () => {
+      console.log(email);
       try {
         const response = await fetch('https://backend-k4dp.onrender.com/api/userdata', {
-          method: "GET",
+          method: "POST", 
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({email}),
         });
-
+          console.log(response);
         if (response.ok) {
-          const users = await response.json();
-          const filteredUser = users.find((user) => user.email === useremail);
+          const userData = await response.json();
+          console.log(userData);
 
-          if (filteredUser) {
-            setUserData(filteredUser);
-            setUpdatedUser(filteredUser);
+          if (userData) {
+            setUserData(userData);
+            setUpdatedUser(userData);
           } else {
             console.error("User with email not found");
           }
@@ -38,39 +41,39 @@ const Profile = () => {
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
-    }
+    };
 
     fetchData();
-  }, [useremail]);
-
-
-  
+  },[email]);
 
   const handleSaveClick = async () => {
     try {
-      const response = await fetch('https://backend-k4dp.onrender.com/api/userdata', {
+      const response = await fetch('https://backend-k4dp.onrender.com/api/user', {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(updatedUser),
+        body: JSON.stringify({'email':email,'name':updatedUser.name,'phone':updatedUser.phone}),
       });
 
       if (response.ok) {
         const updatedUserData = await response.json();
-        setUserData(updatedUserData);
+        console.log(updatedUser.user);
+        setUserData(updatedUserData.user);
         setIsEditing(false);
-        toast.success("Data updated successfully....");
+        toast.success("Data updated successfully.");
       } else {
         console.error("Failed to update user data");
+        toast.error("Failed to update user data.");
       }
     } catch (error) {
-      toast.error("Some error has occured...");
       console.error("Error updating user data:", error);
+      toast.error("An error occurred while updating user data.");
     }
   };
 
-  const handleInputChange = ({ target: { name, value } }) => {
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
     setUpdatedUser({
       ...updatedUser,
       [name]: value,
@@ -85,10 +88,10 @@ const Profile = () => {
         return <div>Favorites content goes here.</div>;
       case "about":
         return <About />;
-        case "address":
-          return <EditAddress/>;
-          case "review":
-            return <Review/>;
+      case "address":
+        return <EditAddress />;
+      case "review":
+        return <Review />;
       default:
         return null;
     }
@@ -100,19 +103,17 @@ const Profile = () => {
 
   const closeEditModal = () => {
     setIsEditing(false);
-    setUpdatedUser(userData);
+    setUpdatedUser(userData); // Reset updatedUser to userData
   };
 
   return (
     <div className="" style={{ minHeight: "100vh" ,background: "rgba(255, 255, 0, 0.1)" }}>
       <div className="container-fluid bg-danger text-light fs-2 py-3 ">
+        
         <div className="row">
-          
           <div className="col-10 px-5">
-            <p className="text-capitalize fw-bold"> {userData?.name}</p>
-            <p className="fs-5  ">
-              {userData?.email}  &nbsp;&nbsp;&nbsp;&nbsp; {userData?.phone} 
-            </p>
+            <p className="text-capitalize fw-bold">{userData?.name}</p>
+            <p className="fs-5">{userData?.email} &nbsp;&nbsp;&nbsp;&nbsp; {userData?.phone}</p>
           </div>
           <div className="col-2 d-flex justify-content-center align-items-center">
             <button
@@ -130,49 +131,48 @@ const Profile = () => {
         <div className="row ">
           <div className="col-md-3">
             <div className="card align-middle">
-              
-                
-                <ul className="list-group">
-                  <li
-                    className={`list-group-item ${
-                      selectedOption === "orders" ? "active" : ""
-                    }`}
-                    onClick={() => setSelectedOption("orders")}
-                  >
-                    Orders
-                  </li>
-                 
-                  <li
-                    className={`list-group-item ${
-                      selectedOption === "about" ? "active" : ""
-                    }`}
-                    onClick={() => setSelectedOption("about")}
-                  >
-                    About
-                  </li>
-                  <li
-                    className={`list-group-item ${
-                      selectedOption === "address" ? "active" : ""
-                    }`}
-                    onClick={() => setSelectedOption("address")}
-                  >
-                    Address
-                  </li>
-
-
-
-
-                  <li
-                    className={`list-group-item ${
-                      selectedOption === "review" ? "active" : ""
-                    }`}
-                    onClick={() => setSelectedOption("review")}
-                  >
-                    Comments
-                  </li>
-                  
-                </ul>
-              
+              <ul className="list-group">
+                <li
+                  className={`list-group-item ${
+                    selectedOption === "orders" ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedOption("orders")}
+                >
+                  Orders
+                </li>
+                <li
+                  className={`list-group-item ${
+                    selectedOption === "favorites" ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedOption("favorites")}
+                >
+                  Favorites
+                </li>
+                <li
+                  className={`list-group-item ${
+                    selectedOption === "about" ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedOption("about")}
+                >
+                  About
+                </li>
+                <li
+                  className={`list-group-item ${
+                    selectedOption === "address" ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedOption("address")}
+                >
+                  Address
+                </li>
+                <li
+                  className={`list-group-item ${
+                    selectedOption === "review" ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedOption("review")}
+                >
+                  Comments
+                </li>
+              </ul>
             </div>
           </div>
           <div className="col-md-9">{renderContent()}</div>
