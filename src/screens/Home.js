@@ -5,8 +5,10 @@ import Display from "../components/Display";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+
 function Home() {
   const [reviews, setReviews] = useState([]);
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -32,53 +34,47 @@ function Home() {
   }, []);
 
   const sliderSettings = {
-    dots:true,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 2000, 
+    autoplaySpeed: 2000,
   };
 
-
   return (
-    <div className="your-class-name">
-      <div style={{ position: "relative" }}>
-        <img className="img-fluid" src="https://source.unsplash.com/900x900/?food" alt="Food" style={{ width: "1400px", height: "650px", maxWidth: "100vw", objectFit: "cover" }} />
-        <div className="text-white fs-1" style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 1 }}>
+    <div className="home">
+      <div className="hero-section" style={{ position: "relative", overflow: "hidden" }}>
+        <img className="img-fluid" src="https://source.unsplash.com/900x900/?food" alt="Food" style={{ width: "100%", maxHeight: "650px", objectFit: "cover" }} />
+        <div className="text-overlay" style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 1 }}>
           <div className="container text-center">
-          <h1 className="display-1 text-light fw-bold " style={{ fontStyle: "italic" ,fontWeight: "1100" }}>GoFood</h1>
-
-            <p className="lead display-5 text-white fs-4 fw-bold" style={{ fontStyle:"ita;ic"}}>
+            <h1 className="display-1 text-light fw-bold italic">GoFood</h1>
+            <p className="lead display-5 text-white fs-4 fw-bold">
               Discover an exquisite world of culinary delights.
             </p>
-            <Link to="/display" className="btn text-white btn-danger btn-lg mt-4" role="button">
+            <Link to="/display" className="btn btn-danger btn-lg mt-4">
               Browse restaurants
             </Link>
           </div>
         </div>
       </div>
+
       <Display />
 
-      <section className="py-5 mx-auto ">
-          <h2 className="fw-bold font-italic text-center text-secondary m-2 ">Customer Reviews:</h2>
-          <div className="row ">
-          <Slider {...sliderSettings}>
+      <section className="py-5 mx-auto customer-reviews">
+        <h2 className="fw-bold font-italic text-center text-secondary m-2">Customer Reviews:</h2>
+        <div className="row mx-auto" style={{ position: "relative", overflow: "hidden" }}>
+          <Slider {...sliderSettings} style={{ position: "relative", zIndex: 1 }}>
             {reviews.map((review) => (
-              
-              <div key={review._id} className="">
+              <div key={review._id}>
                 <ReviewCard review={review} />
               </div>
-          
-
             ))}
-            </Slider>
-          </div>
-        {/* </div> */}
+          </Slider>
+        </div>
       </section>
 
-      <section className="py-5  ">
+      <section className="py-5 about-services">
         <div className="container">
           <h2 className="display-6 fw-bold font-italic text-center">About Our Services:</h2>
           <p className="lead text-center fs-4 text-secondary">

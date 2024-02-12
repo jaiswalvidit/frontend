@@ -104,7 +104,7 @@ const Review = () => {
   return (
     <>
       <div className="container-fluid  my-5  mx-auto text-center  d-flex justify-content-center">
-     <div className="card bg-light text-secondary">
+     <div className="card ">
        <div className="card-body">
          <h1 className="text-center mb-4">Add Review</h1>
          <form onSubmit={handleSubmit}>
