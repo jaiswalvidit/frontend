@@ -47,9 +47,9 @@ function Home() {
       <div className="hero-section" style={{ position: "relative", overflow: "hidden" }}>
         <img className="img-fluid" src="https://source.unsplash.com/900x900/?food" alt="Food" style={{ width: "100%", maxHeight: "650px", objectFit: "cover" }} />
         <div className="text-overlay" style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 1 }}>
-          <div className="container text-center">
-            <h1 className="display-1 text-light fw-bold italic">GoFood</h1>
-            <p className="lead display-5 text-white fs-4 fw-bold">
+          <div className="container home-content  text-center">
+            <h1 className="">GoFood</h1>
+            <p className="  text-secondary  ">
               Discover an exquisite world of culinary delights.
             </p>
             <Link to="/display" className="btn btn-danger btn-lg mt-4">

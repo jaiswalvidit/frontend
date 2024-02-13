@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import RestaurantCard from './RestaurantCard';
 import Shimmer from './Shimmer';
+import { debounce } from 'lodash';
 
 const Display = () => {
   const [restaurantList, setRestaurantList] = useState([]);
@@ -27,21 +28,17 @@ const Display = () => {
     setFilteredRestaurants(filteredList);
   };
 
-  const handleSearch = () => {
-    if (searchText.trim() === '') {
-      // If search is empty, reset the filtered list to the original list
-      setFilteredRestaurants(filteredRestaurants);
-    } else {
-      const filteredList = restaurantList.filter((res) => {
-        const nameMatch = res?.restaurantName?.toLowerCase().includes(searchText.toLowerCase());
-        const categoryMatch = res?.cuisines?.some((cuisine) =>
-          cuisine.category.toLowerCase().includes(searchText.toLowerCase())
-        );
-        return nameMatch || categoryMatch;
-      });
-      setFilteredRestaurants(filteredList);
-    }
-  };
+  const handleSearch = debounce((searchText) => {
+    const filteredList = restaurantList.filter((res) => {
+      const nameMatch = res?.restaurantName?.toLowerCase().includes(searchText.toLowerCase());
+      const categoryMatch = res?.cuisines?.some((cuisine) =>
+        cuisine.category.toLowerCase().includes(searchText.toLowerCase())
+      );
+      return nameMatch || categoryMatch;
+    });
+    setFilteredRestaurants(filteredList);
+  }, 300);
+  
 
   const SortTime = () => {
     const sortedByTime = [...filteredRestaurants].sort((a, b) => {
@@ -99,25 +96,30 @@ const Display = () => {
 
   return (
     <div>
-      <div className="container mt-4">
-        <h1 className="mt-4">Restaurant List</h1>
-        <div className="mb-3">
-          <button className="btn btn-primary me-2" onClick={handleAverageRatingFilter}>
+      <div className="container ">
+      <h1 className="text-secondary text-center fw-italic">Restaurant List</h1>
+
+        <div className=" mb-3  my-2 ">
+          <button className="btn btn-primary me-2 my-2" onClick={handleAverageRatingFilter}>
             {averageRatingFilter ? 'Show All Ratings' : 'Top Ratings'}
           </button>
+          <div className='d-flex justify-content-center text-secondary mx-2 '>
           <input
             type="text"
             placeholder="Search by Name or Category"
-            className="form-control ml-2 p-2"
+            className="form-control text-center "
+            style={{ borderRadius: '25px', width: '50vw', padding: '5px 10px', position: 'relative',background:'#bbccda' }}
             value={searchText}
             onChange={(e) => {
               setSearchText(e.target.value);
               handleSearch();
             }}
           />
-          <button className="btn btn-secondary m-2" onClick={handleSearch}>
-            Search
+          
+          <button className="btn btn-secondary m-2 rounded-circle px-3 py-2 fs-5  " onClick={handleSearch}>
+          <i class="fas fa-search text-black "></i>
           </button>
+          </div>
           <button className="btn btn-danger m-2" onClick={resetFilter}>
             Reset Filters
           </button>

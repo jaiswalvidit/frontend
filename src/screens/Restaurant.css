@@ -114,3 +114,23 @@ body {
   background-color: #bbcbda;
   color: black;
 }
+.home-content h1{
+  /* text-style:italic; */
+  font-weight:500;
+  color:wheat;
+  font-size:9em;
+  font-style: italic;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  text-shadow: #11bcbc;
+  text-decoration-thickness: 2px ;
+  z-index:3px;
+  shape-rendering: crispEdges;
+}
+.home-content p{
+  font-weight:700;
+  z-index:3;
+  font-size:2em;
+  font-family:'Times New Roman', Times, serif;
+  font-style: italic;
+  
+}
