@@ -19,14 +19,7 @@ const Display = () => {
     setFilteredRestaurants(restaurantList);
   };
 
-  const handleAverageRatingFilter = () => {
-    setAverageRatingFilter(!averageRatingFilter);
-    const filteredList = restaurantList.filter((res) => {
-      const avgRating = parseFloat(res?.Rating);
-      return !averageRatingFilter ? avgRating >= 4 : true;
-    });
-    setFilteredRestaurants(filteredList);
-  };
+  
 
   const handleSearch = debounce((searchText) => {
     const filteredList = restaurantList.filter((res) => {
@@ -100,10 +93,8 @@ const Display = () => {
       <h1 className="text-secondary text-center fw-italic">Restaurant List</h1>
 
         <div className=" mb-3  my-2 ">
-          <button className="btn btn-primary me-2 my-2" onClick={handleAverageRatingFilter}>
-            {averageRatingFilter ? 'Show All Ratings' : 'Top Ratings'}
-          </button>
-          <div className='d-flex justify-content-center text-secondary mx-2 '>
+         
+          <div className=' dis-content  d-flex justify-content-center text-secondary '>
           <input
             type="text"
             placeholder="Search by Name or Category"
