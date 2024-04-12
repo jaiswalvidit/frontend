@@ -25,7 +25,7 @@ import PasswordGenerator from './components/passwordGenerator';
 
 function App() {
   return (
-    <CartProvider>
+    <CartProvider style={{width:'100vw'}}>
       <Router>
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
           <Navbar />

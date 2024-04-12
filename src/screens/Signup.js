@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { TextField, Button, Typography, Paper, Box } from '@mui/material';
+import { TextField, Button, Typography, Paper, Box, IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -15,10 +16,12 @@ const Signup = () => {
     phone: '',
     geolocation: '',
   });
+  
 
   const [passwordStrength, setPasswordStrength] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [phoneError, setPhoneError] = useState('');
-
+  
   const handleChange = (event) => {
     const { name, value } = event.target;
     setCredentials((prevCredentials) => ({
@@ -46,8 +49,13 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (credentials.phoneError) {
-      alert('Please correct the form errors before submitting.');
+    if (credentials.password !== credentials.confirmPassword) {
+      toast.error('Passwords do not match');
+      return;
+    }
+
+    if (phoneError) {
+      toast.error('Please correct the phone number');
       return;
     }
 
@@ -60,19 +68,21 @@ const Signup = () => {
     });
 
     const json = await response.json();
-    toast.success('Data updated successfully....');
 
     if (json.success) {
       localStorage.setItem('user_credentials', JSON.stringify(credentials));
+      toast.success('Signup successful');
       navigate('/auth/login');
+    } else {
+      toast.error(json.message || 'Signup failed');
     }
   };
 
   return (
     <Box className="container my-5 d-flex justify-content-center">
-      <Paper elevation={3} sx={{ maxWidth: 400, p: 4, borderRadius: 2, bgcolor: 'background.paper' }}>
-        <Typography variant="h4" gutterBottom>
-          Signup
+      <Paper elevation={3} sx={{ maxWidth: 400, p: 4, borderRadius: 2, bgcolor: '#f0f0f0' }}>
+        <Typography variant="h1"  className='text-center text-secondary fs-1'gutterBottom sx={{ color: '#333333' }}>
+          Sign up
         </Typography>
         <form onSubmit={handleSubmit}>
           <TextField
@@ -82,8 +92,10 @@ const Signup = () => {
             value={credentials.name}
             onChange={handleChange}
             fullWidth
+            autoComplete='off'
             required
             margin="normal"
+            sx={{ bgcolor: '#ffffff' }}
           />
           <TextField
             label="Email"
@@ -94,10 +106,11 @@ const Signup = () => {
             fullWidth
             required
             margin="normal"
+            sx={{ bgcolor: '#ffffff' }}
           />
           <TextField
             label="Password"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             name="password"
             value={credentials.password}
             onChange={handleChange}
@@ -106,6 +119,19 @@ const Signup = () => {
             fullWidth
             required
             margin="normal"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowPassword(!showPassword)}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            sx={{ bgcolor: '#ffffff' }}
           />
           <TextField
             label="Confirm Password"
@@ -116,6 +142,7 @@ const Signup = () => {
             fullWidth
             required
             margin="normal"
+            sx={{ bgcolor: '#ffffff' }}
           />
           <TextField
             label="Phone"
@@ -128,6 +155,7 @@ const Signup = () => {
             fullWidth
             required
             margin="normal"
+            sx={{ bgcolor: '#ffffff' }}
           />
           <TextField
             label="Location"
@@ -138,12 +166,13 @@ const Signup = () => {
             fullWidth
             required
             margin="normal"
+            sx={{ bgcolor: '#ffffff' }}
           />
           <Box mt={2} display="flex" justifyContent="space-between">
             <Button type="submit" variant="contained" color="primary">
               Sign Up
             </Button>
-            <Button variant="outlined" color="secondary" component={Link} to="/auth/login">
+            <Button variant="submit" color="secondary" className='center p-2' component={Link} to="/auth/login">
               Already have an account?
             </Button>
           </Box>
