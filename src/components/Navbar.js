@@ -33,7 +33,7 @@ const Navbar = () => {
   };
 
   return (
-    <>
+    <div >
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark fs-5" style={{ backgroundColor: "rgba(0, 0, 0, 1.0)" }}>
         <div className="container-fluid">
            <Link className="navbar-brand border bg-white rounded-circle" to="/">
@@ -131,7 +131,7 @@ const Navbar = () => {
           </Modal.Footer>
         </Modal>
       )}
-    </>
+    </div>
   );
 };
 

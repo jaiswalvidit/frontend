@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
-import { faCheckCircle} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Restaurant.css';
-
+import { TextField, Button, FormControlLabel, Checkbox } from '@mui/material';
+import { AddCircleOutline } from '@mui/icons-material';
 const AddRestaurantForm = () => {
   const [formData, setFormData] = useState({
     restaurantName: '',
     areaName: '',
     Rating: '',
     DeliveryTime: '',
-    availability: false,  // Set default value to false for the checkbox
+    availability: false,
     cloudinaryImageId: '',
   });
-  const authToken = (localStorage.getItem('authToken'));
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    const updatedValue = type === 'checkbox' ? checked : type === 'number' ? parseFloat(value) : value;
+    const updatedValue = type === 'checkbox' ? checked : value;
 
     setFormData((prevData) => ({
       ...prevData,
@@ -25,159 +24,93 @@ const AddRestaurantForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!authToken) {
-      console.error('User not authenticated. Please log in.');
-      return;
-    }
     console.log(formData);
-    try {
-      const response = await fetch('https://backend-k4dp.onrender.com/api/auth/addRestaurant', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-        },
-        body: JSON.stringify(formData),
-      });
-
-      console.log(response);
-
-      if (!response.ok) {
-        console.error(`Request failed with status ${response.status}`);
-        return;
-      }
-
-      const json = await response.json();
-      console.log('API Response:', json);
-
-      alert('Form filled successfully');
-
-      setFormData({
-        restaurantName: '',
-        areaName: '',
-        Rating: '',
-        DeliveryTime: '',
-        availability: false,  // Reset checkbox to false after submission
-        cloudinaryImageId: '',
-      });
-    } catch (error) {
-      console.error('Error:', error.message);
-    }
+    // Add your submission logic here
   };
-
   return (
-    <div className="container my-5 mx-auto text-center  d-flex justify-content-center">
-     
-       
-    <div className="card text-secondary">
-      <div className="card-body">
-        <h1 className="text-center mb-4">Register Restaurant</h1>
-        <form onSubmit={handleSubmit}>
-            <div className="form mb-3">
-              <input
-                type="text"
-                className="text-box"
-                id="restaurantName"
-                name="restaurantName"
-                value={formData.restaurantName}
-                placeholder=''
+    <div className="container" style={{margin:"10px 0px"}}>
+   <div className="row justify-content-center align-items-center">
+      <div className="col-md-6">
+        <div className="card">
+          <div className="card-body">
+            <h1 className="text-center mb-4">Register a restaurant</h1>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              label="Restaurant Name"
+              type="text"
+              name="restaurantName"
+              value={formData.restaurantName}
+              onChange={handleChange}
+              fullWidth
+              required
+              margin="normal"
+            />
+            <TextField
+              label="Area Name"
+              type="text"
+              name="areaName"
+              value={formData.areaName}
+              onChange={handleChange}
+              fullWidth
+              required
+              margin="normal"
+            />
+            <TextField
+              label="Image URL"
+              type="text"
+              name="cloudinaryImageId"
+              value={formData.cloudinaryImageId}
+              onChange={handleChange}
+              fullWidth
+              required
+              margin="normal"
+            />
+            <TextField
+              label="Rating"
+              type="text"
+              name="Rating"
+              value={formData.Rating}
+              onChange={handleChange}
+              fullWidth
+              required
+              margin="normal"
+            />
+            <TextField
+              label="Delivery Time"
+              type="text"
+              name="DeliveryTime"
+              value={formData.DeliveryTime}
+              onChange={handleChange}
+              fullWidth
+              required
+              margin="normal"
+            />
+            <FormControlLabel
+              control={<Checkbox
+                checked={formData.availability}
                 onChange={handleChange}
-                required
-              />
-               <label htmlFor="name" className="form-label">
-                     Name
-                  </label>
-            </div>
-
-            <div className="form mb-3">
-              <input
-                type="text"
-                className="text-box"
-                id="areaName"
-                name="areaName"
-                value={formData.areaName}
-                placeholder=''
-                onChange={handleChange}
-                required
-              />
-               <label htmlFor="name" className="form-label">
-                    Areaname
-                  </label>
-            </div>
-
-            <div className="form mb-3">
-              <input
-                type="text"
-                className="text-box"
-                id="cloudinaryImageId"
-                name="cloudinaryImageId"
-                placeholder=''
-                autoComplete='off'
-                value={formData.cloudinaryImageId}
-                onChange={handleChange}
-                required
-              />
-               <label htmlFor="name" className="form-label">
-                    Image
-                  </label>
-            </div>
-
-            <div className="form mb-3">
-              <input
-                type="text"
-                className="text-box"
-                id="Rating"
-                name="Rating"
-                value={formData.Rating}
-                placeholder=''
-                onChange={handleChange}
-                required
-              />
-               <label htmlFor="name" className="form-label">
-                    Rating
-                  </label>
-            </div>
-
-            <div className="form mb-3">
-              <input
-                type="text"
-                className="text-box"
-                id="DeliveryTime"
-                name="DeliveryTime"
-                placeholder=''
-                value={formData.DeliveryTime}
-                onChange={handleChange}
-                required
-              />
-               <label htmlFor="name" className="form-label">
-                    Time
-                  </label>
-            </div>
-
-            <div className="form mb-3 d-flex md-6 ">
-              <label className=''>Availability:</label>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  name="availability"
-                  id="availabilityCheckbox"
-                  onChange={handleChange}
-                  value="true"
-                />
-               True           
-              </div>
-            </div>
-
+                name="availability"
+                color="primary"
+              />}
+              label="Availability"
+            />
             <div className="text-center">
-              <button type="submit" className="btn btn-primary">
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                startIcon={<AddCircleOutline />}
+                className="mt-3"
+              >
                 Add Restaurant
-              </button>
+              </Button>
             </div>
           </form>
         </div>
       </div>
-    </div>
+      </div></div>
+      </div>
+   
   );
 };
 

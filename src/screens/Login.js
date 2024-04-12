@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import PasswordGenerator from '../components/passwordGenerator';
+import { TextField, Button, CircularProgress, Card, Typography } from '@mui/material';
+import { EmailOutlined, LockOutlined } from '@mui/icons-material';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -46,68 +47,64 @@ const Login = () => {
   };
 
   return (
-    <div className="container-fluid my-5 mx-auto text-center d-flex justify-content-center">
-      <div className="card text-secondary">
-        <div className="card-body">
-          <h1 className="text-center mb-4">Login</h1>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <input
-                type="email"
-                name="email"
-                className="text-box"
-                placeholder=""
-                id="email"
-                autoComplete="off"
-                value={credentials.email}
-                onChange={handleChange}
-                required
-              />
-              <label htmlFor="email" className="form-label">
-                Email
-              </label>
-              <i className="input-icon uil uil-at"></i>
-            </div>
-            <div className="mb-3">
-              <input
-                type="password"
-                className="text-box"
-                id="password"
-                name="password"
-                placeholder=""
-                autoComplete="off"
-                value={credentials.password}
-                onChange={handleChange}
-                required
-              />
-              <label htmlFor="password" className="form-label">
-                Password
-              </label>
-            </div>
-            <div className="text-center">
-              {loading && (
-                <div className="spinner-border" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-              )}
-              {error && <div className="alert alert-danger">{error}</div>}
-              <div className="input-added px-2 py-2">
-                <button
-                  type="submit"
-                  className="btn btn-primary mx-2"
-                  disabled={loading}
-                >
-                  {loading ? 'Logging in...' : 'Login'}
-                </button>
-                <Link to="/auth/createuser" className="btn btn-danger ms-2">
+    <div className="container my-5 d-flex justify-content-center">
+      <Card className="card p-4">
+        <Typography variant="h4" gutterBottom>
+          Login
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <TextField
+              type="email"
+              name="email"
+              label="Email"
+              value={credentials.email}
+              onChange={handleChange}
+              fullWidth
+              required
+              InputProps={{
+                startAdornment: <EmailOutlined />,
+              }}
+            />
+          </div>
+          <div className="mb-3">
+            <TextField
+              type="password"
+              name="password"
+              label="Password"
+              value={credentials.password}
+              onChange={handleChange}
+              fullWidth
+              required
+              InputProps={{
+                startAdornment: <LockOutlined />,
+              }}
+            />
+          </div>
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            <div className="mb-3 d-flex justify-content-between">
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+              >
+                Login
+              </Button>
+              <Link to="/auth/createuser">
+                <Button variant="contained" color="secondary">
                   Sign up
-                </Link>
-              </div>
-              <Link to="/forgot-password">Forgot Password</Link>
+                </Button>
+              </Link>
             </div>
-          </form>
-        </div>
-      </div>
+          )}
+          {error && <Typography variant="body2" color="error">{error}</Typography>}
+          <Link to="/forgot-password" className="text-decoration-none">
+            Forgot Password
+          </Link>
+        </form>
+      </Card>
     </div>
   );
 };

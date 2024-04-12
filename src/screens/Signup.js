@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-// import './Signup.css'; // Make sure to create Signup.css for your styles
+import { TextField, Button, Typography, Paper, Box } from '@mui/material';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const Signup = () => {
   const navigate = useNavigate();
 
@@ -17,34 +16,32 @@ const Signup = () => {
     geolocation: '',
   });
 
-  
   const [passwordStrength, setPasswordStrength] = useState(false);
+  const [phoneError, setPhoneError] = useState('');
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setCredentials((prevCredentials) => ({
       ...prevCredentials,
-      [name]: value,
-      passwordStrength:
-        name === 'password'
-          ? checkPasswordStrength(value)
-          : prevCredentials.passwordStrength,
-      phoneError: name === 'phone' ? checkMobileNumber(value) : prevCredentials.phoneError,
+      [name]: value
     }));
+    if (name === 'password') {
+      checkPasswordStrength(value);
+    }
+    if (name === 'phone') {
+      setPhoneError(checkMobileNumber(value));
+    }
   };
 
   const checkPasswordStrength = (password) => {
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{8,}$/;
-    const isStrong = passwordRegex.test(password);
-    setPasswordStrength(isStrong);
-    return isStrong ? 'strong' : 'weak';
+    setPasswordStrength(passwordRegex.test(password));
   };
 
   const checkMobileNumber = (phone) => {
     const phoneRegex = /^\d{10}$/;
     return phoneRegex.test(phone) ? '' : 'Mobile number must be 10 digits';
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,135 +69,88 @@ const Signup = () => {
   };
 
   return (
-    <div className="container  my-5  mx-auto text-center  d-flex justify-content-center">
-      <div className="">
-        <div className="">
-          <div className="card  text-info d-flex justify-content-center">
-            <div className="card-body">
-              <h1 className="text-center mb-4 mx-auto">Signup Page</h1>
-              <form onSubmit={handleSubmit}>
-                <div className="form mb-3">
-                  <input
-                    type="text"
-                    className="text-box"
-                    id="name"
-                    name="name"
-                    value={credentials.name}
-                    onChange={handleChange}
-                    placeholder=''
-                    required
-                  />
-                  <label htmlFor="name" className="form-label">
-                    Name
-                  </label>
-                </div>
-
-                <div className="form mb-3 ">
-                  <input
-                    type="text"
-                    className="text-box"
-                    id="email"
-                    name="email"
-                    placeholder=''
-                    value={credentials.email}
-                    onChange={handleChange}
-                    required
-                  />
-                  <label htmlFor="email" className="form-label">
-                    Email
-                  </label>
-                </div>
-
-                <div className="form mb-3">
-                  <input
-                    type='password'
-                    className={`text-box ${passwordStrength ? 'is-valid' : 'is-invalid'}`}
-                    id="password"
-                    name="password"
-                    placeholder=''
-                    value={credentials.password}
-                    onChange={handleChange}
-                    required
-                  />
-                  <label htmlFor="password" className="form-label">
-                    Password
-                  </label>
-                  {passwordStrength && (
-                    <div className="valid-feedback">{credentials.passwordMessage}</div>
-                  )}
-                  {!passwordStrength && (
-                    <div className="invalid-feedback">{credentials.passwordMessage}</div>
-                  )}
-                </div>
-
-                <div className="form mb-3">
-                  <input
-                    type='password'
-                    className="text-box"
-                    id="confirmPassword"
-                    placeholder=''
-                    name="confirmPassword"
-                    value={credentials.confirmPassword}
-                    onChange={handleChange}
-                    required
-                  />
-                  <label htmlFor="confirmPassword" className="form-label">
-                    Confirm 
-                  </label>
-                </div>
-
-                <div className="form mb-3">
-                  <input
-                    type="text"
-                    className={`text-box ${credentials.phoneError ? 'is-invalid' : ''} ${
-                      credentials.phone ? 'active' : ''
-                    }`}
-                    id="phone"
-                    name="phone"
-                    value={credentials.phone}
-                    placeholder=''
-                    onChange={handleChange}
-                    required
-                  />
-                  <label htmlFor="phone" className="form-label">
-                    Phone
-                  </label>
-                  {credentials.phoneError && (
-                    <div className="invalid-feedback">{credentials.phoneError}</div>
-                  )}
-                </div>
-
-                <div className="form mb-3">
-                  <input
-                    type="text"
-                    className="text-box"
-                    id="geolocation"
-                    placeholder=''
-                    name="geolocation"
-                    value={credentials.geolocation}
-                    onChange={handleChange}
-                    required
-                  />
-                  <label htmlFor="geolocation" className="form-label">
-                    Location
-                  </label>
-                </div>
-
-                <div className="text-center">
-                  <button type="submit" className="btn btn-primary">
-                    Sign In
-                  </button>
-                  <Link to="/auth/login" className="btn btn-danger ms-2">
-                    Already Signin
-                  </Link>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+    <Box className="container my-5 d-flex justify-content-center">
+      <Paper elevation={3} sx={{ maxWidth: 400, p: 4, borderRadius: 2, bgcolor: 'background.paper' }}>
+        <Typography variant="h4" gutterBottom>
+          Signup
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            label="Name"
+            type="text"
+            name="name"
+            value={credentials.name}
+            onChange={handleChange}
+            fullWidth
+            required
+            margin="normal"
+          />
+          <TextField
+            label="Email"
+            type="email"
+            name="email"
+            value={credentials.email}
+            onChange={handleChange}
+            fullWidth
+            required
+            margin="normal"
+          />
+          <TextField
+            label="Password"
+            type="password"
+            name="password"
+            value={credentials.password}
+            onChange={handleChange}
+            error={!passwordStrength && credentials.password.length > 0}
+            helperText={!passwordStrength ? "Password is weak" : "Password is strong"}
+            fullWidth
+            required
+            margin="normal"
+          />
+          <TextField
+            label="Confirm Password"
+            type="password"
+            name="confirmPassword"
+            value={credentials.confirmPassword}
+            onChange={handleChange}
+            fullWidth
+            required
+            margin="normal"
+          />
+          <TextField
+            label="Phone"
+            type="text"
+            name="phone"
+            value={credentials.phone}
+            onChange={handleChange}
+            error={!!phoneError}
+            helperText={phoneError}
+            fullWidth
+            required
+            margin="normal"
+          />
+          <TextField
+            label="Location"
+            type="text"
+            name="geolocation"
+            value={credentials.geolocation}
+            onChange={handleChange}
+            fullWidth
+            required
+            margin="normal"
+          />
+          <Box mt={2} display="flex" justifyContent="space-between">
+            <Button type="submit" variant="contained" color="primary">
+              Sign Up
+            </Button>
+            <Button variant="outlined" color="secondary" component={Link} to="/auth/login">
+              Already have an account?
+            </Button>
+          </Box>
+        </form>
+      </Paper>
       <ToastContainer position="top-center" />
-    </div>
+    </Box>
   );
 };
 

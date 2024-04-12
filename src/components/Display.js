@@ -9,53 +9,7 @@ const Display = () => {
   const [restaurantList, setRestaurantList] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
-  const [averageRatingFilter, setAverageRatingFilter] = useState(false);
-  const [time, setTime] = useState(true);
-  const [rating, setRating] = useState(true);
-
-  const resetFilter = () => {
-    setSearchText('');
-    setAverageRatingFilter(false);
-    setFilteredRestaurants(restaurantList);
-  };
-
-  
-
-  const handleSearch = debounce((searchText) => {
-    const filteredList = restaurantList.filter((res) => {
-      const nameMatch = res?.restaurantName?.toLowerCase().includes(searchText.toLowerCase());
-      const categoryMatch = res?.cuisines?.some((cuisine) =>
-        cuisine.category.toLowerCase().includes(searchText.toLowerCase())
-      );
-      return nameMatch || categoryMatch;
-    });
-    setFilteredRestaurants(filteredList);
-  }, 300);
-  
-
-  const SortTime = () => {
-    const sortedByTime = [...filteredRestaurants].sort((a, b) => {
-      const timeA = a.DeliveryTime;
-      const timeB = b.DeliveryTime;
-      return time ? timeA - timeB : timeB - timeA;
-    });
-
-    setFilteredRestaurants(sortedByTime);
-    setTime(!time); // Toggle the sorting property
-    setRating(true); // Reset rating sorting property
-  };
-
-  const SortRating = () => {
-    const sortedByRating = [...filteredRestaurants].sort((a, b) => {
-      const ratingA = parseFloat(a.Rating);
-      const ratingB = parseFloat(b.Rating);
-      return rating ? ratingA - ratingB : ratingB - ratingA;
-    });
-
-    setFilteredRestaurants(sortedByRating);
-    setRating(!rating); // Toggle the sorting property
-    setTime(true); // Reset time sorting property
-  };
+  const [sortOrder, setSortOrder] = useState({ field: '', order: 'asc' });
 
   useEffect(() => {
     const fetchRestaurantData = async () => {
@@ -69,7 +23,6 @@ const Display = () => {
 
         if (response.ok) {
           const data = await response.json();
-
           if (Array.isArray(data)) {
             setRestaurantList(data);
             setFilteredRestaurants(data);
@@ -87,61 +40,81 @@ const Display = () => {
     fetchRestaurantData();
   }, []);
 
-  return (
-    <div>
-      <div className="container ">
-      <h1 className="text-secondary text-center fw-italic">Restaurant List</h1>
+  const handleSearch = debounce((searchText) => {
+    const filteredList = restaurantList.filter((res) => {
+      const nameMatch = res?.restaurantName?.toLowerCase().includes(searchText.toLowerCase());
+      const categoryMatch = res?.cuisines?.some((cuisine) =>
+        cuisine.category.toLowerCase().includes(searchText.toLowerCase())
+      );
+      return nameMatch || categoryMatch;
+    });
+    setFilteredRestaurants(filteredList);
+  }, 300);
 
-        <div className=" mb-3  my-2 ">
-         
-          <div className=' dis-content  d-flex justify-content-center text-secondary '>
-          <input
-            type="text"
-            placeholder="Search by Name or Category"
-            className="form-control text-center "
-            style={{ borderRadius: '25px', width: '50vw', padding: '5px 10px', position: 'relative',background:'#bbccda' }}
-            value={searchText}
-            onChange={(e) => {
-              setSearchText(e.target.value);
-              handleSearch();
-            }}
-          />
-          
-          <button className="btn btn-secondary m-2 rounded-circle px-3 py-2 fs-5  " onClick={handleSearch}>
-          <i class="fas fa-search text-black "></i>
-          </button>
-          </div>
-          <button className="btn btn-danger m-2" onClick={resetFilter}>
-            Reset Filters
-          </button>
-          <button className="btn btn-danger m-2" onClick={SortTime}>
-            {`Sort by Time ${time ? 'Descending' : 'Ascending'}`}
-          </button>
-          <button className="btn btn-danger m-2" onClick={SortRating}>
-            {`Sort by Rating ${rating ? 'Descending' : 'Ascending'}`}
-          </button>
-        </div>
-        <div className="row">
-          {filteredRestaurants && filteredRestaurants.length > 0 ? (
-            filteredRestaurants.map((restaurant) => (
-              <div key={restaurant._id} className="col-md-4 mb-4">
-                <Link to={`/display/${restaurant._id}`} style={{ textDecoration: 'none' }}>
-                  <div className="">
-                    <RestaurantCard resData={restaurant} />
-                  </div>
-                </Link>
-              </div>
-            ))
-          ) : (
-            <div className="col-md-12 text-center">
-              <div>
-                <Shimmer />
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+  const resetFilter = () => {
+    setSearchText('');
+    setFilteredRestaurants(restaurantList);
+    setSortOrder({ field: '', order: 'asc' });
+  };
+
+  const handleSort = (field) => {
+    const isAsc = sortOrder.field === field && sortOrder.order === 'asc';
+    const sortedList = [...filteredRestaurants].sort((a, b) => {
+      if (a[field] < b[field]) return isAsc ? 1 : -1;
+      if (a[field] > b[field]) return isAsc ? -1 : 1;
+      return 0;
+    });
+    setFilteredRestaurants(sortedList);
+    setSortOrder({ field, order: isAsc ? 'desc' : 'asc' });
+  };
+
+  return (
+    <div className="container mt-4" style={{ fontFamily: "'Poppins', sans-serif" }}>
+    <h1 className="text-center mb-3" style={{ color: "#2C3E50" }}>Restaurant List</h1>
+  
+    <div className="d-flex flex-wrap justify-content-center gap-2 mb-4" style={{ overflowX: 'auto' }}>
+      <input
+        type="text"
+        placeholder="Search by Name or Category"
+        className="form-control"
+        style={{ maxWidth: '40%', borderRadius: '30px', padding: '10px 20px' }}
+        value={searchText}
+        onChange={(e) => {
+          setSearchText(e.target.value);
+          handleSearch(e.target.value);
+        }}
+      />
+      <button className="btn btn-info" onClick={() => handleSearch(searchText)}>
+        Search
+      </button>
+      <button className="btn btn-outline-secondary" onClick={resetFilter}>
+        Reset Filters
+      </button>
+      <button className="btn btn-outline-success" onClick={() => handleSort('DeliveryTime')}>
+        Sort by Time {sortOrder.field === 'DeliveryTime' && (sortOrder.order === 'asc' ? '↑' : '↓')}
+      </button>
+      <button className="btn btn-outline-danger" onClick={() => handleSort('Rating')}>
+        Sort by Rating {sortOrder.field === 'Rating' && (sortOrder.order === 'asc' ? '↑' : '↓')}
+      </button>
     </div>
+  
+    <div className="row g-3">
+      {filteredRestaurants.length > 0 ? (
+        filteredRestaurants.map((restaurant) => (
+          <div key={restaurant._id} className="col-md-4">
+            <Link to={`/display/${restaurant._id}`} style={{ textDecoration: 'none' }}>
+              <RestaurantCard resData={restaurant} />
+            </Link>
+          </div>
+        ))
+      ) : (
+        <div className="col-12 text-center">
+          <Shimmer />
+        </div>
+      )}
+    </div>
+  </div>
+  
   );
 };
 

@@ -27,27 +27,29 @@ function App() {
   return (
     <CartProvider>
       <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          
-          <Route path="/success" element={<Success />} />
-          <Route path="/cancel" element={<Cancel />} />
-          <Route path="/auth/login" element={<Login />} />
-          <Route path="/addrestaurant" element={<Restaurant />} />
-          <Route path="/display" element={<Display />} />
-          <Route path="/display/:_id" element={<RestaurantDetail />} />
-          <Route path="/addItem" element={<Item />} />
-          <Route path="/auth/createuser" element={<Signup />} />
-          <Route path="/myorder" element={<MyOrder />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/dashboard/profile" element={<Profile />} />
-          <Route path="/forgot-password" element={<PasswordGenerator />} />
-          <Route element={<Error />} />
-          
-        </Routes>
-        <Footer />
+        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+          <Navbar />
+          <div style={{ flex: 1, overflow: 'auto' }}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/success" element={<Success />} />
+              <Route path="/cancel" element={<Cancel />} />
+              <Route path="/auth/login" element={<Login />} />
+              <Route path="/addrestaurant" element={<Restaurant />} />
+              <Route path="/display" element={<Display />} />
+              <Route path="/display/:_id" element={<RestaurantDetail />} />
+              <Route path="/addItem" element={<Item />} />
+              <Route path="/auth/createuser" element={<Signup />} />
+              <Route path="/myorder" element={<MyOrder />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/dashboard/profile" element={<Profile />} />
+              <Route path="/forgot-password" element={<PasswordGenerator />} />
+              <Route element={<Error />} />
+            </Routes>
+          </div>
+          <Footer />
+        </div>
       </Router>
     </CartProvider>
   );

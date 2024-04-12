@@ -1,145 +1,35 @@
-.text-box {
-  border: 2px solid black;
-  border-radius: 5px;
-  outline: none;
-  background: #bbcbda;
-  padding: 10px;
-  color: black;
-  width: 100%;
-  text-align: center;
+* {
   box-sizing: border-box;
-  transition: border-color 0.3s ease, color 0.3s ease;
-  font-size: large;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-  font-style: italic;
-}
-
-.form-label {
-  position: relative;
-  top: -40px;
-  left: -33%;
-  cursor: text;
-  transition: top 0.3s ease, left 0.3s ease, font-size 0.3s ease, color 0.3s ease;
-  margin-left: 2px;
-  padding-left: 2px;
-  font-size: 1.3em;
-  color: grey;
-  font-weight: 300;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
-
-.text-box:focus,
-.text-box:not(:placeholder-shown):not(:focus) {
-  border-color: #177474f3;
-  background: #bbcbda;
-  font-size: large;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-  font-style: italic;
-}
-
-.text-box:focus ~ .form-label,
-.text-box:not(:placeholder-shown) ~ .form-label {
-  top: -67px;
-  left: -33%;
-  background: #bbcbda;
-  font-size: 1.5em;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-  font-style: italic;
-  color: #11bcbc;
-  padding: 1px 3px;
-}
-
-.card {
-  animation: fadeIn 0.5s ease-in-out;
-  background-color: #bbcbda;
-}
-
-/* Styling for select box */
-.form-select {
-  width: 100%;
-  padding: 10px;
-  border: 2px solid #7d5252;
-  border-radius: 5px;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease, color 0.3s ease;
-}
-
-.form-check {
-  margin-bottom: 10px;
-}
-
-.form-check-input {
-  margin-left: 5px;
-}
-
-.form-check-label {
-  font-weight: normal; 
-}
-
-@media (max-width: 767px) {
-  .navbar-nav {
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-.navbar-toggler {
-  display: block;
-}
-
-.navbar-nav .nav-item {
-  margin: 10px 0;
-}
-
-.navbar-nav .nav-item:last-child {
-  margin-bottom: 20px;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(0px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 body {
-  background: wheat;
+  background: #f5deb3; /* changed to a lighter wheat color */
 }
 
-.text-box:-webkit-autofill {
-  background-color: #bbcbda;
-  color: black;
-}
-.home-content h1{
-  /* text-style:italic; */
-  font-weight:500;
-  color:wheat;
-  font-size:9em;
+
+
+
+/* Additional styles for specific elements */
+.home-content h1 {
+  font-weight: 500;
+  color: wheat;
+  font-size: 5em; /* adjusted font size for better readability */
   font-style: italic;
-  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  text-shadow: #11bcbc;
-  text-decoration-thickness: 2px ;
-  z-index:3px;
-  shape-rendering: crispEdges;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  text-shadow: 0 0 5px #11bcbc;
+  z-index: 3;
 }
-.home-content p{
-  font-weight:700;
-  z-index:3;
-  font-size:2em;
-  font-family:'Times New Roman', Times, serif;
+
+.home-content p {
+  font-weight: 700;
+  font-size: 1.5em; /* adjusted font size for better readability */
+  font-family: 'Times New Roman', Times, serif;
   font-style: italic;
-  
+  z-index: 3;
 }
+
 @media (max-width: 768px) {
   .home-content h1 {
-    font-size: 2rem;
-  }
-  .dis-content{
-    display:flex;
-    justify-content:none;
+    font-size: 3rem; /* adjusted font size for smaller screens */
   }
 }

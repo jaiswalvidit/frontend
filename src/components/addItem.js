@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import "./additem.css";
+import { TextField, Button, Select, MenuItem, FormControl, InputLabel, Checkbox, FormControlLabel } from '@mui/material';
+import { AddCircleOutline } from '@mui/icons-material';
+import "./additem.css"; // Ensure this CSS file contains the styles described below
 
 const AddItemForm = () => {
   const [formData, setFormData] = useState({
@@ -7,27 +9,24 @@ const AddItemForm = () => {
     cloudinaryImageId: "",
     category: "",
     parentName: "",
-    Rating: "",
+    rating: "",
     cost: "",
-    availability: false, 
+    availability: false,
     description: "",
   });
 
   const [parentOptions, setParentOptions] = useState([]);
   const authToken = localStorage.getItem("authToken");
+
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const response = await fetch(
-          "https://backend-k4dp.onrender.com/api/auth/addrestaurant"
-        );
+        const response = await fetch("https://backend-k4dp.onrender.com/api/auth/restaurants");
         const data = await response.json();
-        const restaurantNames = data.map(
-          (restaurant) => restaurant.restaurantName
-        );
+        const restaurantNames = data.map(restaurant => restaurant.restaurantName);
         setParentOptions(restaurantNames);
       } catch (error) {
-        console.error("Error fetching restaurant names:", error.message);
+        console.error("Error fetching restaurant names:", error);
       }
     };
 
@@ -35,10 +34,10 @@ const AddItemForm = () => {
   }, []);
 
   const handleChange = (e) => {
-    const { name, value, type } = e.target;
-    setFormData((prevData) => ({
+    const { name, value, type, checked } = e.target;
+    setFormData(prevData => ({
       ...prevData,
-      [name]: type === "number" ? parseFloat(value) : value,
+      [name]: type === "checkbox" ? checked : value
     }));
   };
 
@@ -48,202 +47,145 @@ const AddItemForm = () => {
       console.error("User not authenticated. Please log in.");
       return;
     }
-    console.log(formData);
 
     try {
-      const response = await fetch(
-        "https://backend-k4dp.onrender.com/api/auth/createItem",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch("https://backend-k4dp.onrender.com/api/auth/createItem", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`
+        },
+        body: JSON.stringify(formData)
+      });
 
-      console.log(response);
-      console.log(authToken);
       if (!response.ok) {
         console.error(`Request failed with status ${response.status}`);
         return;
       }
 
       const json = await response.json();
-      console.log("API Response:", json);
+      console.log("Item added:", json);
+      alert("Item added successfully!");
 
+      // Clear the form
       setFormData({
         itemName: "",
         cloudinaryImageId: "",
         category: "",
         parentName: "",
-        Rating: "",
+        rating: "",
         cost: "",
-        availability: "",
+        availability: false,
         description: "",
       });
-
-      alert("Form filled successfully");
     } catch (error) {
-      console.error("Error:", error.message);
+      console.error("Error submitting form:", error);
     }
   };
 
-  const {
-    itemName,
-    cloudinaryImageId,
-    category,
-  
-    Rating,
-    cost,
-    
-    description,
-  } = formData;
-
   return (
-    <div className="container-fluid my-5  mx-auto text-center d-flex justify-content-center">
-      <div className="card text-secondary">
-        <div className="card-body">
-          <h1 className="text-center mb-4">Add Item</h1>
-          <form onSubmit={handleSubmit}>
-            <div className="form mb-3 ">
-              <input
-                type="text"
-                className="text-box"
-                name="itemName"
-                placeholder=""
-                value={itemName}
-                onChange={handleChange}
-                required
-              />
-              <label htmlFor="name" className="form-label">
-                Item Name
-              </label>
-            </div>
-            <div className="form mb-3 ">
-              <input
-                type="text"
-                className="text-box"
-                name="cloudinaryImageId"
-                value={cloudinaryImageId}
-                placeholder=""
-                onChange={handleChange}
-                required
-              />
-              <label htmlFor="name" className="form-label">
-                Image
-              </label>
-            </div>
-
-            <div className="form mb-3 ">
-              {/* <label htmlFor="cost" className="form-label">Cost:</label> */}
-              <input
-                type="text"
-                className="text-box"
-                name="cost"
-                value={cost}
-                placeholder=""
-                onChange={handleChange}
-                required
-              />
-              <label htmlFor="name" className="form-label">
-                Cost
-              </label>
-            </div>
-
-            <div className="form mb-3 ">
-              {/* <label htmlFor="description" className="form-label">Description:</label> */}
-              <input
-                type="textarea"
-                name="description"
-                value={description}
-                onChange={handleChange}
-                placeholder=""
-                className="text-box"
-                required
-              />
-              <label htmlFor="name" className="form-label">
-                Description
-              </label>
-            </div>
-
-            <div className="form mb-3 ">
-              {/* <label htmlFor="category" className="form-label">Category:</label> */}
-              <input
-                type="text"
-                name="category"
-                value={category}
-                onChange={handleChange}
-                placeholder=""
-                autoComplete="off"
-                className="text-box"
-                required
-              />
-              <label htmlFor="name" className="form-label">
-                Category
-              </label>
-            </div>
-
-            <div className="mb-3">
-            <select
-              name="parentName"
-              value={formData.parentName}
-              onChange={handleChange}
-              className="text-box"
-              placeholder=''
-              required
-            >
-              <option value="" disabled>
-                 
-              </option>
-              {parentOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-            <label htmlFor="name" className="form-label">
-              Restaurant
-            </label>
-          </div>
-
-            <div className="form">
-              <input
-                type="number"
-                name="Rating"
-                value={Rating}
-                placeholder=""
-                onChange={handleChange}
-                className="text-box"
-                required
-              />
-              <label htmlFor="name" className="form-label">
-                Rating
-              </label>
-            </div>
-
-            
-              <div className="">
-              <label className='text-secondary fs-4 mx-2'>Availability:</label>
-              <div className="form-check">
-                <input
-                  className=""
-                  type="checkbox"
-                  name="availability"
-                  id="availabilityCheckbox"
+    <div className="container">
+      <div className="row justify-content-center">
+        <div className="col-md-6">
+          <div className="card">
+            <div className="card-body">
+              <h1 className="text-center mb-4">Add Item</h1>
+              <form onSubmit={handleSubmit}>
+                <TextField
+                  label="Item Name"
+                  type="text"
+                  name="itemName"
+                  value={formData.itemName}
                   onChange={handleChange}
-                  value="true"
+                  fullWidth
+                  required
+                  margin="normal"
                 />
-               True           
-              </div>
+                <TextField
+                  label="Image ID"
+                  type="text"
+                  name="cloudinaryImageId"
+                  value={formData.cloudinaryImageId}
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                  margin="normal"
+                />
+                <TextField
+                  label="Cost"
+                  type="number"
+                  name="cost"
+                  value={formData.cost}
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                  margin="normal"
+                />
+                <TextField
+                  label="Description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                  multiline
+                  rows={4}
+                  margin="normal"
+                />
+                <TextField
+                  label="Category"
+                  type="text"
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                  margin="normal"
+                />
+                <FormControl fullWidth margin="normal" required>
+                  <InputLabel>Restaurant</InputLabel>
+                  <Select
+                    name="parentName"
+                    value={formData.parentName}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="">Select a restaurant</MenuItem>
+                    {parentOptions.map(option => (
+                      <MenuItem key={option} value={option}>{option}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <TextField
+                  label="Rating"
+                  type="number"
+                  name="rating"
+                  value={formData.rating}
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                  margin="normal"
+                />
+                <FormControlLabel
+                  control={<Checkbox
+                    checked={formData.availability}
+                    onChange={handleChange}
+                    name="availability"
+                  />}
+                  label="Availability"
+                />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  startIcon={<AddCircleOutline />}
+                  fullWidth
+                  style={{ marginTop: '1rem' }}
+                >
+                  Add Item
+                </Button>
+              </form>
             </div>
-            <div className="text-center">
-              <button type="submit" className="btn btn-primary">
-                Add Item
-              </button>
-            </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>

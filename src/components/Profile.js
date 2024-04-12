@@ -58,8 +58,9 @@ const Profile = () => {
 
       if (response.ok) {
         const updatedUserData = await response.json();
-        console.log(updatedUser.user);
-        setUserData(updatedUserData.user);
+        console.log(updatedUserData);
+
+        setUserData(updatedUserData.Data);
         setIsEditing(false);
         toast.success("Data updated successfully.");
       } else {
@@ -84,8 +85,6 @@ const Profile = () => {
     switch (selectedOption) {
       case "orders":
         return <MyOrder />;
-      case "favorites":
-        return <div>Favorites content goes here.</div>;
       case "about":
         return <About />;
       case "address":
@@ -107,30 +106,32 @@ const Profile = () => {
   };
 
   return (
-    <div className="" style={{ minHeight: "100vh" ,background: "rgba(255, 255, 0, 0.1)" }}>
-      <div className="container-fluid bg-danger text-light fs-2 py-3 ">
-        
-        <div className="row">
-          <div className="col-10 px-5">
-            <p className="text-capitalize fw-bold">{userData?.name}</p>
-            <p className="fs-5">{userData?.email} &nbsp;&nbsp;&nbsp;&nbsp; {userData?.phone}</p>
-          </div>
-          <div className="col-2 d-flex justify-content-center align-items-center">
-            <button
-              type="button"
-              className="btn btn-outline-light"
-              onClick={openEditModal}
-            >
-              EDIT PROFILE
-            </button>
+    <div className="container-fluid p-0" style={{ background: "rgba(255, 255, 0, 0.1)" }}>
+      <div className="bg-danger text-light py-3 ">
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="col-8">
+              <p className="text-capitalize fw-bold mb-0 fs-2  text-primary">{userData?.name}</p>
+              <p className="fs-4" style={{ fontFamily: "italic" }}>{userData?.email} &nbsp;&nbsp;&nbsp;&nbsp; {userData?.phone}</p>
+
+            </div>
+            <div className="col-4 text-center">
+              <button
+                type="button"
+                className="btn btn-outline-light"
+                onClick={openEditModal}
+              >
+                EDIT PROFILE
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="container mt-2">
-        <div className="row ">
+        <div className="row">
           <div className="col-md-3">
-            <div className="card align-middle">
+            <div className="card">
               <ul className="list-group">
                 <li
                   className={`list-group-item ${
@@ -139,14 +140,6 @@ const Profile = () => {
                   onClick={() => setSelectedOption("orders")}
                 >
                   Orders
-                </li>
-                <li
-                  className={`list-group-item ${
-                    selectedOption === "favorites" ? "active" : ""
-                  }`}
-                  onClick={() => setSelectedOption("favorites")}
-                >
-                  Favorites
                 </li>
                 <li
                   className={`list-group-item ${
@@ -193,29 +186,39 @@ const Profile = () => {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div className="modal-body">
-              <div className="form-group">
-                <label htmlFor="name">Name:</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="name"
-                  name="name"
-                  value={updatedUser.name || ""}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="phone">Phone:</label>
-                <input
-                  type="tel"
-                  className="form-control"
-                  id="phone"
-                  name="phone"
-                  value={updatedUser.phone || ""}
-                  onChange={handleInputChange}
-                />
-              </div>
+            <div>
+            <div className="form mb-3 mx-2 ">
+                  <input
+                    type="text"
+                    className="text-box"
+                    id="name"
+                    name="name"
+                    value={updatedUser.name}
+                    onChange={handleInputChange}
+                    placeholder=''
+                    required
+                  />
+                  <label htmlFor="name" className="form-label">
+                    Name
+                  </label>
+                </div>
+
+                <div className="form mb-3 mx-2 ">
+                  <input
+                    type="text"
+                    className="text-box"
+                    id="phone"
+                    name="phone"
+                    value={updatedUser.phone}
+                    onChange={handleInputChange}
+                    placeholder=''
+                    required
+                  />
+                  <label htmlFor="name" className="form-label">
+                    Phone
+                  </label>
+                </div>
+
             </div>
             <div className="modal-footer">
               <button

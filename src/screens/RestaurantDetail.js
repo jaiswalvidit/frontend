@@ -60,28 +60,26 @@ export default function RestaurantDetail() {
       : item?.filter((el) => el.category === selectedCategory);
 
   return (
-    <div>
-      {restaurant ? (
-        <div className="card-fluid mx-auto my-3 p-4 bg-dark d-flex justify-content-center border-radius-10">
+    <div className="container-fluid my-3" style={{ fontFamily: "'Roboto', sans-serif", color: "#333" }}>
+    {restaurant ? (
+      <div className="card p-4" style={{ backgroundColor: "#FFF7EF" }}>
         <div className="row align-items-center">
-          <div className="col-md-6 text-left">
-            <h1 className="mb-3 fs-1 text-danger">{restaurant.restaurantName}</h1>
-            <p className="mb-2  text-success">
+          <div className="col-md-6">
+            <h1 className="mb-3 fs-3" style={{ color: "#FF6B6B" }}>{restaurant.restaurantName}</h1>
+            <p className="mb-2">
               <strong>Rating:</strong> {restaurant.Rating}
-              
             </p>
-            <p className="mb-2 text-success">
-              <strong >Availability:</strong>{" "}
+            <p className="mb-2">
+              <strong>Availability:</strong>{" "}
               <span className={restaurant.availability ? "text-success" : "text-danger"}>
                 {restaurant.availability ? "Open" : "Closed"}
               </span>
             </p>
             <p>
-              <div className="text-success">
-              <strong className="">Cuisines:</strong> {catItem.slice(0, -1).join(", ")}</div>
+              <strong>Cuisines:</strong> {catItem.slice(0, -1).join(", ")}
             </p>
           </div>
-          <div className="col-md-6 text-md-right">
+          <div className="col-md-6 text-center">
             <img
               className="img-fluid rounded"
               src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_300,h_200/${restaurant.cloudinaryImageId}`}
@@ -90,45 +88,38 @@ export default function RestaurantDetail() {
           </div>
         </div>
       </div>
-      
-      
-      
-      ) : (
-        <p>Loading restaurant details...</p>
-      )}
+    ) : (
+      <p>Loading restaurant details...</p>
+    )}
 
       {item && catItem && catItem.length > 1 ? (
-        <div>
-          <div className="mt-4 fs-1 bolder text-italic text-secondary mx-2 mb-3">MENU</div>
+        <div className="mt-4">
+          <div className="fs-2 text-danger mb-3">MENU</div>
 
           <div className="mb-3 text-center">
-            
-           
             {catItem.map((category) => (
               <button
                 key={category}
                 onClick={() => handleClick(category)}
-                className={`btn btn-outline-primary mr-2 mx-2 px-2  ${
+                className={`btn btn-outline-primary mx-2 px-3 ${
                   selectedCategory === category ? "active" : ""
                 }`}
               >
                 {category}
               </button>
             ))}
-              
-              
           </div>
 
           <div className="row">
-  {filteredItems.map((list) => (
-    <div key={list._id} className="col-md-4 mb-4">
-      <FoodDataCard
-        foodItem={list}
-        url={`${IMAGE_URL}${list.cloudinaryImageID}`}
-      />
-    </div>
-  ))}
-</div>
+            {filteredItems.map((list) => (
+              <div key={list._id} className="col-md-4 mb-4">
+                <FoodDataCard
+                  foodItem={list}
+                  url={`${IMAGE_URL}${list.cloudinaryImageID}`}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       ) : (
         <p>Loading food items...</p>
